@@ -87,9 +87,10 @@ def ffmpeg_process(file_, ffmpegPath, ffprobePath, basePath):
     video = ffmpeg.drawtext(
             video,
             text="LegalTechnicality.com",
-            x=40, y="h-lh-40",
+            x=40, y="h-th-40",
             fontfile=os.path.join(basePath, "resources", "fonts", "OpenSans-Regular.ttf"),
-            fontsize=60, alpha=0.75
+            fontsize=60, alpha=0.75,
+            fontcolor="white"
             )
 
     output = ffmpeg.output(video, audio, outputFile) # **{"ac": 1}
@@ -104,8 +105,9 @@ def ffmpeg_process(file_, ffmpegPath, ffprobePath, basePath):
         if stderr: # actually a false error -- just the ffmpeg output
             log.debug("ffmpeg output: {}".format(stderr.decode("utf-8")))
         log.info("sucessfully processed file")
-    except:
+    except ffmpeg.Error as e:
         log.exception("failed to process file")
+        log.exception(e.stderr)
 
 def main():
     log.info("starting app...")
@@ -123,7 +125,7 @@ def main():
     # find files
     if dev:
         # files = ["sample1.mp4"]
-        files = ["courtchanges20182.mp4"]
+        files = ["courtchanges2018Sample.mp4"]
         files = [os.path.abspath( os.path.join(basePath, "sampleVideos", f) ) for f in files]
     else:
         if os.name == "nt":
