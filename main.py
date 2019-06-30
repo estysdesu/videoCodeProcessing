@@ -1,11 +1,18 @@
-import sys, os, shutil, subprocess, random, math
-import ffmpeg
+#!venv/bin/python3
 
+import sys
+import os
+import shutil
+import subprocess
+import random
+import math
+import ffmpeg
 import logging
 import logHandlers
 
-# TODO: consider async
-# TODO: duration of code overlay -- in order to have code overlay stop at certain time, first split video @ the frame that is 15 sec after code start; code will only go to end of video segment, then concat back to gether
+CODE_DUR = 30 # unit: [s]
+
+
 
 def ffmpeg_setup(basePath):
     ffmpegBin = os.path.join(basePath, "resources", "ffmpeg", "bin")
@@ -15,7 +22,7 @@ def ffmpeg_setup(basePath):
         sep = ":"
     path = sep.join( (ffmpegBin, os.environ["PATH"]) )
     os.environ["PATH"] = path
-    log.info("path updated: {}".format(path))
+    log.debug("path updated: {}".format(path))
 
     try:
         ffmpegPath = shutil.which("ffmpeg")
